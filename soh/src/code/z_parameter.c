@@ -204,7 +204,8 @@ static const char* actionsTbl[] =
     gNum8DoActionENGTex,
 };
 
-static const char gDoEmptyTexture[] = "__OTR__textures/virtual/gEmptyTexture";
+static const ALIGN_ASSET(2) char gDoEmptyTexture[] = "__OTR__textures/virtual/gEmptyTexture";
+static const ALIGN_ASSET(2) char gDPad[] = "__OTR__textures/parameter_static/gDPad";
 
 // original name: "alpha_change"
 void Interface_ChangeAlpha(u16 alphaType) {
@@ -5219,7 +5220,7 @@ void Interface_Draw(PlayState* play) {
 
             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, dPadColor.r, dPadColor.g, dPadColor.b, dpadAlpha);
             if (fullUi) {
-                gDPLoadTextureBlock(OVERLAY_DISP++, "__OTR__textures/parameter_static/gDPad",
+                gDPLoadTextureBlock(OVERLAY_DISP++, gDPad,
                                     G_IM_FMT_IA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                     G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
                 gSPWideTextureRectangle(OVERLAY_DISP++, DpadPosX << 2, DpadPosY << 2,
