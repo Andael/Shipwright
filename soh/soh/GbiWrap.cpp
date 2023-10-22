@@ -69,6 +69,11 @@ extern "C" void gSPSegmentLoadRes(void* value, int segNum, uintptr_t target) {
 }
 
 extern "C" void gDPSetTextureImage(Gfx* pkt, u32 format, u32 size, u32 width, uintptr_t i) {
+    char* filename = reinterpret_cast<char*>(i);
+    if (filename[0] == '_' && filename[1] == '_' && (i&1) == 1)
+    {
+        auto x = 1;
+    }
     __gDPSetTextureImage(pkt, format, size, width, i);
 }
 
