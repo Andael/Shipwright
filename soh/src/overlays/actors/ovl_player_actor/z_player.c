@@ -7965,7 +7965,7 @@ s32 func_80842964(Player* this, PlayState* play) {
     return func_8083B040(this, play) || func_8083B644(this, play) || func_8083E5A8(this, play);
 }
 
-void func_808429B4(PlayState* play, s32 speed, s32 y, s32 countdown) {
+void func_808429B4_ShakeCamera(PlayState* play, s32 speed, s32 y, s32 countdown) {
     s32 quakeIdx = Quake_Add(Play_GetCamera(play, 0), 3);
 
     Quake_SetSpeed(quakeIdx, speed);
@@ -7973,9 +7973,9 @@ void func_808429B4(PlayState* play, s32 speed, s32 y, s32 countdown) {
     Quake_SetCountdown(quakeIdx, countdown);
 }
 
-void func_80842A28(PlayState* play, Player* this) {
-    func_808429B4(play, 27767, 7, 20);
-    play->actorCtx.unk_02 = 4;
+void func_80842A28_MegatonQuake(PlayState* play, Player* this) {
+    func_808429B4_ShakeCamera(play, 27767, 7, 20);
+    play->actorCtx.hammering = 4;
     func_8083264C(this, 255, 20, 150, 0);
     func_8002F7DC(&this->actor, NA_SE_IT_HAMMER_HIT);
 }
@@ -8084,7 +8084,7 @@ s32 func_80842DF4(PlayState* play, Player* this) {
 
                         if (this->heldItemAction == PLAYER_IA_HAMMER) {
                             func_80832630(play);
-                            func_80842A28(play, this);
+                            func_80842A28_MegatonQuake(play, this);
                             func_80842D20(play, this);
                             return 1;
                         }
@@ -8494,7 +8494,7 @@ s32 func_80843E64(PlayState* play, Player* this) {
         }
 
         func_80837AE0(this, 40);
-        func_808429B4(play, 32967, 2, 30);
+        func_808429B4_ShakeCamera(play, 32967, 2, 30);
         func_8083264C(this, impactInfo->unk_01, impactInfo->unk_02, impactInfo->unk_03, 0);
         func_8002F7DC(&this->actor, NA_SE_PL_BODY_HIT);
         func_80832698(this, impactInfo->sfxId);
@@ -8704,7 +8704,7 @@ void func_80844708(Player* this, PlayState* play) {
 
                     func_80832264(play, this, D_80853914[PLAYER_ANIMGROUP_17][this->modelAnimType]);
                     this->linearVelocity = -this->linearVelocity;
-                    func_808429B4(play, 33267, 3, 12);
+                    func_808429B4_ShakeCamera(play, 33267, 3, 12);
                     func_8083264C(this, 255, 20, 150, 0);
                     func_8002F7DC(&this->actor, NA_SE_PL_BODY_HIT);
                     func_80832698(this, NA_SE_VO_LI_CLIMB_END);
@@ -13785,7 +13785,7 @@ void func_808502D0(Player* this, PlayState* play) {
                 if ((((this->meleeWeaponAnimation == 0x16) && LinkAnimation_OnFrame(&this->skelAnime, 7.0f)) ||
                      ((this->meleeWeaponAnimation == 0x13) && LinkAnimation_OnFrame(&this->skelAnime, 2.0f))) &&
                     (sp2C > -40.0f) && (sp2C < 40.0f)) {
-                    func_80842A28(play, this);
+                    func_80842A28_MegatonQuake(play, this);
                     EffectSsBlast_SpawnWhiteShockwave(play, &shockwavePos, &zeroVec, &zeroVec);
                 }
             }

@@ -2490,8 +2490,8 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
         GameInteractor_ExecuteOnSceneSpawnActors();
     }
 
-    if (actorCtx->unk_02 != 0) {
-        actorCtx->unk_02--;
+    if (actorCtx->hammering != 0) {
+        actorCtx->hammering--;
     }
 
     if (KREG(0) == -100) {

@@ -332,7 +332,7 @@ s32 func_809F70E8(EnDodojr* this, PlayState* play) {
         return 0;
     }
 
-    if (play->actorCtx.unk_02 != 0) {
+    if (play->actorCtx.hammering != 0) {
         if (this->actionFunc != func_809F73AC) {
             if (this->actionFunc == func_809F74C4) {
                 this->actor.shape.shadowDraw = ActorShadow_DrawCircle;

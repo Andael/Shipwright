@@ -350,7 +350,7 @@ typedef struct {
 typedef struct {
     /* 0x0000 */ u8     freezeFlashTimer;
     /* 0x0001 */ char   unk_01[0x01];
-    /* 0x0002 */ u8     unk_02;
+    /* 0x0002 */ u8     hammering;
     /* 0x0003 */ u8     lensActive;
     /* 0x0004 */ char   unk_04[0x04];
     /* 0x0008 */ u8     total; // total number of actors loaded
