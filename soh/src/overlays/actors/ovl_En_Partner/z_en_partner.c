@@ -12,6 +12,7 @@
 #include <overlays/actors/ovl_En_Bom/z_en_bom.h>
 #include <overlays/actors/ovl_Obj_Switch/z_obj_switch.h>
 #include <overlays/effects/ovl_Effect_Ss_HitMark/z_eff_ss_hitmark.h>
+#include "soh/Enhancements/enhancementTypes.h"
 
 #define FLAGS (ACTOR_FLAG_UPDATE_WHILE_CULLED | ACTOR_FLAG_DRAW_WHILE_CULLED | ACTOR_FLAG_DRAGGED_BY_HOOKSHOT | ACTOR_FLAG_CAN_PRESS_SWITCH)
 
@@ -645,7 +646,11 @@ void EnPartner_Update(Actor* thisx, PlayState* play) {
         relY = 0;
     }
 
-    Math_SmoothStepToF(&this->actor.speedXZ, sqrtf(SQ(relX) + SQ(relY)), 1.0f, 1.3f, 0.0f);
+    float multiplier = 1.0f;
+    if (CVarGetInteger("gMMBunnyHood", BUNNY_HOOD_VANILLA) != BUNNY_HOOD_VANILLA && GET_PLAYER(play)->currentMask == PLAYER_MASK_BUNNY)
+        multiplier = 1.2f;
+    
+    Math_SmoothStepToF(&this->actor.speedXZ, sqrtf(SQ(relX) + SQ(relY)) * multiplier, 1.0f, 1.3f * multiplier, 0.0f);
 
     if (this->shouldDraw == 1) {
         thisx->shape.shadowAlpha = 0xFF;
