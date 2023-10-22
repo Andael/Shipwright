@@ -309,7 +309,7 @@ void UseHammer(Actor* thisx, PlayState* play, u8 started) {
             EffectSsHitMark_SpawnCustomScale(play, EFFECT_HITMARK_METAL, 200, &effectPos);
 
             // update collider:
-            this->weaponCollider.info.toucher.dmgFlags = 0x40000048;
+            this->weaponCollider.info.toucher.dmgFlags = 0x00000040;
             Collider_UpdateCylinder(&this->actor, &this->weaponCollider);
             CollisionCheck_SetAT(play, &play->colChkCtx, &this->weaponCollider.base);
 
