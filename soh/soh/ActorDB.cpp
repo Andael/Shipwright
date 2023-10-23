@@ -604,6 +604,8 @@ static ActorDBInit EnPartnerInit = {
 };
 extern "C" s16 gEnPartnerId;
 
+static_assert(sizeof(EnPartner) <= 1072);
+
 void ActorDB::AddBuiltInCustomActors() {
     gEnPartnerId = ActorDB::Instance->AddEntry(EnPartnerInit).entry.id;
 }
