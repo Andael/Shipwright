@@ -298,7 +298,7 @@ void UseBombs(Actor* thisx, PlayState* play, u8 started) {
 
 static Vec3f D_80854A40 = { 0.0f, 40.0f, 45.0f };
 
-void UseHammer(Actor* thisx, PlayState* play, u8 started) {
+void UseHammer(Actor* thisx, PlayState* play, u8 started, u32 dmgFlags) {
     EnPartner* this = (EnPartner*)thisx;
 
     if (this->itemTimer <= 0) {
@@ -316,7 +316,7 @@ void UseHammer(Actor* thisx, PlayState* play, u8 started) {
             EffectSsHitMark_SpawnCustomScale(play, EFFECT_HITMARK_METAL, 200, &effectPos);
 
             // update collider:
-            this->weaponCollider->info.toucher.dmgFlags = 0x00000040;
+            this->weaponCollider->info.toucher.dmgFlags = dmgFlags;
             Collider_UpdateCylinder(&this->actor, this->weaponCollider);
             CollisionCheck_SetAT(play, &play->colChkCtx, &this->weaponCollider->base);
 
@@ -598,7 +598,7 @@ void UseItem(uint8_t usedItem, u8 started, Actor* thisx, PlayState* play) {
                 UseSpell(this, play, started, 3);
                 break;
             case SLOT_HAMMER:
-                UseHammer(this, play, started);
+                UseHammer(this, play, started, 0x00000040);
                 break;
             case SLOT_BOOMERANG:
                 UseBoomerang(this, play, started);
@@ -608,6 +608,16 @@ void UseItem(uint8_t usedItem, u8 started, Actor* thisx, PlayState* play) {
                 break;
             case SLOT_BEAN:
                 UseBeans(this, play, started);
+                break;
+            case SLOT_IVAN_HURT:
+                if (gSaveContext.inventory.equipment & 3) {
+                    UseHammer(this, play, started, 0x00000100);
+                } else {
+                    UseHammer(this, play, started, 0x00000001);
+                }
+                break;
+            case SLOT_IVAN_STUN:
+                UseHammer(this, play, started, 0x00000001);
                 break;
         }
     }
@@ -737,10 +747,14 @@ void EnPartner_Update(Actor* thisx, PlayState* play) {
         if (this->usedItem == 0xFF && this->itemTimer <= 0) {
             if (CHECK_BTN_ALL(sControlInput.press.button, BTN_CLEFT)) {
                 this->usedItem = gSaveContext.equips.cButtonSlots[0];
+                if (this->usedItem == SLOT_NONE)
+                    this->usedItem = SLOT_IVAN_HURT;
                 this->usedItemButton = 0;
                 pressed = 1;
             } else if (CHECK_BTN_ALL(sControlInput.press.button, BTN_CDOWN)) {
                 this->usedItem = gSaveContext.equips.cButtonSlots[1];
+                if (this->usedItem == SLOT_NONE)
+                    this->usedItem = SLOT_IVAN_STUN;
                 this->usedItemButton = 1;
                 pressed = 1;
             } else if (CHECK_BTN_ALL(sControlInput.press.button, BTN_CRIGHT)) {
