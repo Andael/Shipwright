@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cmake -H. -Bbuild-cmake -GNinja
+cmake --build build-cmake --target clean
+cmake --build build-cmake --target ExtractAssets
+cmake --build build-cmake
