@@ -55,7 +55,7 @@ static ColliderCylinderInit sCylinderInit = {
         BUMP_ON,
         OCELEM_ON,
     },
-    { 12, 27, 0, { 0, 0, 0 } },
+    { 10, 20, 0, { 0, 0, 0 } },
 };
 
 static ColliderCylinderInit sWeaponCylinderInit = {
@@ -75,7 +75,7 @@ static ColliderCylinderInit sWeaponCylinderInit = {
         BUMP_NONE,
         OCELEM_NONE,
     },
-    { 32, 67, 0, { 0, 0, 0 } },
+    { 20, 40, 0, { 0, 0, 0 } },
 };
 
 static CollisionCheckInfoInit sCCInfoInit = { 0, 12, 60, MASS_HEAVY };
@@ -707,7 +707,7 @@ void EnPartner_Update(Actor* thisx, PlayState* play) {
                     itemActor->params == ITEM00_ARROWS_MEDIUM || itemActor->params == ITEM00_ARROWS_LARGE ||
                     itemActor->params == ITEM00_BOMBCHU || itemActor->params == ITEM00_MAGIC_SMALL ||
                     itemActor->params == ITEM00_MAGIC_LARGE || itemActor->params == ITEM00_NUTS ||
-                    itemActor->params == ITEM00_STICK) {
+                    itemActor->params == ITEM00_STICK || itemActor->params == ITEM00_SEEDS) {
                     f32 distanceToObject = Actor_WorldDistXYZToActor(&this->actor, itemActor);
                     if (distanceToObject <= 20.0f) {
                         itemActor->world.pos = GET_PLAYER(play)->actor.world.pos;
