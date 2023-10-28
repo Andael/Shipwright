@@ -62,6 +62,7 @@ std::string GetWindowButtonText(const char* text, bool menuOpen) {
 
     static const char* chestStyleMatchesContentsOptions[4] = { "Disabled", "Both", "Texture Only", "Size Only" };
     static const char* bunnyHoodOptions[3] = { "Disabled", "Faster Run & Longer Jump", "Faster Run" };
+    static const char* hideNaviOptions[3] = { "Vanilla", "Except Hint Locations", "Always Hide" };
     static const char* mirroredWorldModes[9] = {
         "Disabled",           "Always",        "Random",          "Random (Seeded)",          "Dungeons",
         "Dungeons (Vanilla)", "Dungeons (MQ)", "Dungeons Random", "Dungeons Random (Seeded)",
@@ -830,6 +831,12 @@ void DrawEnhancementsMenu() {
                 UIWidgets::Tooltip("Disable the low HP beeping sound");
                 UIWidgets::PaddedEnhancementCheckbox("Minimal UI", "gMinimalUI", true, false);
                 UIWidgets::Tooltip("Hides most of the UI when not needed\nNote: Doesn't activate until after loading a new scene");
+                UIWidgets::PaddedText("Hide Navi", true, false);
+                UIWidgets::EnhancementCombobox("gHideNavi", hideNaviOptions, HIDE_NAVI_OFF);
+                UIWidgets::Tooltip(
+                    "Prevents Navi from coming out and flying around.\n\n"
+                    "Does not affect Z-targeting."
+                );
                 UIWidgets::PaddedEnhancementCheckbox("Disable Navi Call Audio", "gDisableNaviCallAudio", true, false);
                 UIWidgets::Tooltip("Disables the voice audio when Navi calls you");
                 UIWidgets::PaddedEnhancementCheckbox("Disable Hot/Underwater Warning Text", "gDisableTunicWarningText", true, false);

@@ -18,6 +18,12 @@ typedef enum {
 } BunnyHoodMode;
 
 typedef enum {
+    HIDE_NAVI_OFF,
+    HIDE_NAVI_EXCEPT_HINTS,
+    HIDE_NAVI_ON,
+} HideNaviOption;
+
+typedef enum {
     MIRRORED_WORLD_OFF,
     MIRRORED_WORLD_ALWAYS,
     MIRRORED_WORLD_RANDOM,
