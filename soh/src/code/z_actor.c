@@ -11,6 +11,7 @@
 #include "soh/Enhancements/game-interactor/GameInteractor.h"
 #include "soh/Enhancements/game-interactor/GameInteractor_Hooks.h"
 #include "soh/Enhancements/nametag.h"
+#include "soh/Enhancements/enhancementTypes.h"
 
 #include "soh/ActorDB.h"
 
@@ -401,6 +402,7 @@ void func_8002BF60(TargetContext* targetCtx, Actor* actor, s32 actorCategory, Pl
         sNaviColorList[ACTORCAT_PROP].outer = defaultPropsSecondaryColor;
     }
 
+    //shane
     NaviColor* naviColor = &sNaviColorList[actorCategory];
     targetCtx->naviRefPos.x = actor->focus.pos.x;
     targetCtx->naviRefPos.y = actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y);
@@ -548,6 +550,26 @@ void func_8002C124(TargetContext* targetCtx, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
+void FilterTargetByHideNaviOption(Actor** targetPtr) {
+    s16 targetId;
+
+    switch (CVarGetInteger("gHideNavi", HIDE_NAVI_OFF)) {
+        case HIDE_NAVI_ON:
+            *targetPtr = NULL;
+            break;
+        case HIDE_NAVI_EXCEPT_HINTS:
+            if (*targetPtr != NULL) {
+                targetId = (*targetPtr)->id;
+                if (targetId != ACTOR_EN_KAKASI2 && targetId != ACTOR_SHOT_SUN) {
+                    *targetPtr = NULL;
+                }
+            }
+            break;
+    }
+}
+
+bool EnElf_ShouldIgnoreTarget(Actor* actor);
+
 void func_8002C7BC(TargetContext* targetCtx, Player* player, Actor* actorArg, PlayState* play) {
     s32 pad;
     Actor* unkActor;
@@ -568,6 +590,7 @@ void func_8002C7BC(TargetContext* targetCtx, Player* player, Actor* actorArg, Pl
         targetCtx->unk_94 = NULL;
     } else {
         func_80032AF0(play, &play->actorCtx, &unkActor, player);
+        // FilterTargetByHideNaviOption(&unkActor);
         targetCtx->unk_94 = unkActor;
     }
 
@@ -585,6 +608,7 @@ void func_8002C7BC(TargetContext* targetCtx, Player* player, Actor* actorArg, Pl
     }
 
     if ((unkActor != targetCtx->arrowPointedActor) || (actorCategory != targetCtx->activeCategory)) {
+        //shane
         targetCtx->arrowPointedActor = unkActor;
         targetCtx->activeCategory = actorCategory;
         targetCtx->unk_40 = 1.0f;
@@ -603,7 +627,11 @@ void func_8002C7BC(TargetContext* targetCtx, Player* player, Actor* actorArg, Pl
         targetCtx->naviRefPos.y += temp3 * temp1;
         targetCtx->naviRefPos.z += temp4 * temp1;
     } else {
-        func_8002BF60(targetCtx, unkActor, actorCategory, play);
+        if (EnElf_ShouldIgnoreTarget(unkActor)) {
+            func_8002BF60(targetCtx, player, player->actor.category, play);
+        } else {
+            func_8002BF60(targetCtx, unkActor, actorCategory, play);
+        }
     }
 
     if ((actorArg != NULL) && (targetCtx->unk_4B == 0)) {

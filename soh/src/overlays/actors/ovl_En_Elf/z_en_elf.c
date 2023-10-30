@@ -6,6 +6,7 @@
 
 #include "z_en_elf.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
+#include "soh/Enhancements/enhancementTypes.h"
 #include <assert.h>
 
 #define FLAGS (ACTOR_FLAG_UPDATE_WHILE_CULLED | ACTOR_FLAG_DRAW_WHILE_CULLED | ACTOR_FLAG_NO_FREEZE_OCARINA)
@@ -849,6 +850,17 @@ void EnElf_UpdateLights(EnElf* this, PlayState* play) {
     Actor_SetScale(&this->actor, this->actor.scale.x);
 }
 
+bool EnElf_ShouldIgnoreTarget(Actor* actor) {
+    switch (CVarGetInteger("gHideNavi", HIDE_NAVI_OFF)) {
+        case HIDE_NAVI_ON:
+            return true;
+        case HIDE_NAVI_EXCEPT_HINTS:
+            return (actor == NULL) ||
+                   (actor->id != ACTOR_EN_KAKASI2 && actor->id != ACTOR_SHOT_SUN);
+    }
+    return false;
+}
+
 void func_80A03CF8(EnElf* this, PlayState* play) {
     Vec3f nextPos;
     Vec3f prevPos;
@@ -952,6 +964,10 @@ void func_80A03CF8(EnElf* this, PlayState* play) {
                 nextPos.y += (1500.0f * this->actor.scale.y);
                 arrowPointedActor = play->actorCtx.targetCtx.arrowPointedActor;
 
+                if (EnElf_ShouldIgnoreTarget(arrowPointedActor)) {
+                    arrowPointedActor = NULL;
+                }
+
                 if (arrowPointedActor != NULL) {
                     func_80A03148(this, &nextPos, 0.0f, 20.0f, 0.2f);
 
@@ -1017,8 +1033,14 @@ void func_80A04414(EnElf* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 transitionRate;
     u16 targetSound;
+    f32 unk_40 = play->actorCtx.targetCtx.unk_40;
 
-    if (play->actorCtx.targetCtx.unk_40 != 0.0f) {
+    if (EnElf_ShouldIgnoreTarget(arrowPointedActor)) {
+        arrowPointedActor = NULL;
+        unk_40 = 0.0f;
+    }
+
+    if (unk_40 != 0.0f) {
         this->unk_2C6 = 0;
         this->unk_29C = 1.0f;
 
@@ -1096,6 +1118,9 @@ void func_80A0461C(EnElf* this, PlayState* play) {
 
     } else {
         arrowPointedActor = play->actorCtx.targetCtx.arrowPointedActor;
+        if (EnElf_ShouldIgnoreTarget(arrowPointedActor)) {
+            arrowPointedActor = NULL;
+        }
 
         if ((player->stateFlags1 & 0x400) || ((YREG(15) & 0x10) && func_800BC56C(play, 2))) {
             temp = 12;
@@ -1109,7 +1134,11 @@ void func_80A0461C(EnElf* this, PlayState* play) {
                 switch (this->unk_2A8) {
                     case 0:
                         if (this->unk_2C0 != 0) {
-                            this->unk_2C0--;
+                            if (CVarGetInteger("gHideNavi", HIDE_NAVI_OFF) != HIDE_NAVI_OFF) {
+                                this->unk_2C0 = 0;
+                            } else {
+                                this->unk_2C0--;
+                            }
                             temp = 0;
                         } else {
                             if (this->unk_2C7 == 0) {

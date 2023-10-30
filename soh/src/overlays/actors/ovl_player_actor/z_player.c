@@ -5451,7 +5451,11 @@ s32 func_8083C1DC(Player* this, PlayState* play) {
         if ((this->unk_837 == 0) && (this->heldItemAction >= PLAYER_IA_SWORD_MASTER)) {
             func_80835F44(play, this, ITEM_NONE);
         } else {
-            this->stateFlags2 ^= PLAYER_STATE2_NAVI_OUT;
+            //shane
+            if (CVarGetInteger("gHideNavi", HIDE_NAVI_OFF) == HIDE_NAVI_OFF) {
+                this->stateFlags2 ^= PLAYER_STATE2_NAVI_OUT;
+            }
+            //shane
         }
     }
 
